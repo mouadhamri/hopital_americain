@@ -1,0 +1,182 @@
+<odoo>
+    <data>
+
+        <record id="ronde_form_view" model="ir.ui.view">
+            <field name="name">ronde.ronde.form.view</field>
+            <field name="model">ronde.ronde</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="%(add_tags_wizard_action)d" type="action" string="Ajouter des tags"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="lieu" options="{'no_create':1, 'no_edit':1}"/>
+                        </group>
+                        <notebook>
+                            <page string="tags">
+                                <field name="tag_ids">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="tag_id"/>
+                                        <field name="is_required"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_ronde_tree" model="ir.ui.view">
+            <field name="name">view.ronde.tree</field>
+            <field name="model">ronde.ronde</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <header>
+                        <button name="start_ronde" type="object" string="Démarrer une ronde"
+                                groups="cna_base.group_cna_ads"/>
+                    </header>
+                    <field name="name"/>
+                    <field name="lieu"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_ronde_search" model="ir.ui.view">
+            <field name="name">view.ronde.search</field>
+            <field name="model">ronde.ronde</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <filter name="groupby_lieu" string="Lieu" domain="[]" context="{'group_by': 'lieu'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="ir_actions_server_start_ronde" model="ir.actions.server">
+            <field name="name">Démarrer une ronde</field>
+            <field name="model_id" ref="tournee.model_ronde_ronde"/>
+            <field name="binding_model_id" ref="tournee.model_ronde_ronde"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">
+res = record.start_ronde()
+action = {
+			'name'     : 'Ronde',
+			'type'     : 'ir.actions.act_window',
+			'view_mode': 'form',
+			'res_model': 'project.task',
+			'target'   : 'current',
+			'context'  :{
+			'default_project_id': env.ref('industry_fsm.fsm_project').id or False,
+			'default_partner_id': env.user.company_id.partner_id.id or False,
+                'default_name':record.name,
+                'default_lieu': record.lieu and record.lieu.id  or False,
+                'default_ronde_id': record.id
+		}
+		}
+            </field>
+        </record>
+
+        <record id="view_task_tags_line_tree" model="ir.ui.view">
+            <field name="name">view.task.tags.line.tree</field>
+            <field name="model">task.tags.line</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="task_id"/>
+                    <field name="tag_id"/>
+                    <field name="is_required"/>
+                    <field name="hors_parcours"/>
+                    <field name="temps_passage" invisible="1"/>
+                    <field name="scan_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="tags_form_view" model="ir.ui.view">
+            <field name="name">tags.form.view</field>
+            <field name="model">tags.tags</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box">
+                            <button name="action_see_all_scan" type="object" class="oe_stat_button"
+                                    icon="fa-check-square-o">
+                                <span class="o_stat_text">Historique des scans</span>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="is_start_scan"/>
+                            <field name="is_end_scan"/>
+                            <field name="site_id"/>
+                            <field name="lieu" domain="[('site_id', '=', site_id)]" required="1"
+                                   options="{'no_create':1, 'no_edit':1}"/>
+                            <field name="respo_zone_id"/>
+                            <field name="last_date_scan"/>
+                        </group>
+                        <field name="tag_file" widget="pdf_viewer"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tags_tree_view" model="ir.ui.view">
+            <field name="name">tags.tree.view</field>
+            <field name="model">tags.tags</field>
+            <field name="arch" type="xml">
+                <tree multi_edit="1" sample="1">
+                    <field name="name"/>
+                    <field name="last_date_scan"/>
+                    <field name="site_id" options="{'no_create':1, 'no_edit':1}"/>
+                    <field name="lieu"/>
+                    <field name="respo_zone_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="tags_search_view" model="ir.ui.view">
+            <field name="name">tags.search</field>
+            <field name="model">tags.tags</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="site_id"/>
+                    <field name="respo_zone_id"/>
+                    <filter string="Non scanné plus 4H" name="last_date_scan"
+                            domain="['|', ('last_date_scan','=', False), ('last_date_scan', '&lt;', (datetime.datetime.now() - relativedelta(hours=4)).strftime('%Y-%m-%d %H:%M:%S'))]"/>
+                    <filter string="Non scanné plus 7H" name="last_date_scan"
+                            domain="['|', ('last_date_scan','=', False), ('last_date_scan', '&lt;', (datetime.datetime.now() - relativedelta(hours=7)).strftime('%Y-%m-%d %H:%M:%S'))]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_tags" model="ir.actions.act_window">
+            <field name="name">Tags</field>
+            <field name="res_model">tags.tags</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_point_acces_group':1}</field>
+        </record>
+
+        <record id="action_ronde" model="ir.actions.act_window">
+            <field name="name">Ronde</field>
+            <field name="res_model">ronde.ronde</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_groupby_lieu':1}</field>
+        </record>
+
+        <record id="action_analyse_scan" model="ir.actions.act_window">
+            <field name="name">Analyse des scans</field>
+            <field name="res_model">task.tags.line</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

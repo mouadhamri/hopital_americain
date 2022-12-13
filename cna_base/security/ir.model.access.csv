@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_site_site_ads,Site ADS,model_site_site,cna_base.group_cna_ads,1,0,0,0
+access_site_site_admin,Site ADMIN,model_site_site,cna_base.group_cna_admin,1,1,1,1
+access_site_lieu_ads,Site lieu ADS,model_site_lieu,cna_base.group_cna_ads,1,0,0,0
+access_site_lieu_admin,Site lieu ADMIN,model_site_lieu,cna_base.group_cna_admin,1,1,1,1
+access_model_importance_ads,Model importance ADS,model_model_importance,cna_base.group_cna_ads,1,0,0,0
+access_model_importance_admin,Model importance ADMIN,model_model_importance,cna_base.group_cna_admin,1,1,1,1

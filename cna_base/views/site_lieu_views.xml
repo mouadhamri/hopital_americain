@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_site_lieu_form" model="ir.ui.view">
+        <field name="name">view.site.lieu.form</field>
+        <field name="model">site.lieu</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="site_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_site_lieu_tree" model="ir.ui.view">
+        <field name="name">view.site.lieu.tree</field>
+        <field name="model">site.lieu</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="site_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_site_lieu_view" model="ir.actions.act_window">
+        <field name="name">Lieux</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">site.lieu</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

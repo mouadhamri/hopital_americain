@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="category_cna_management">
+            <field name="name">CNA management</field>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="group_cna_ads" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="name">ADS</field>
+            <field name="category_id" ref="category_cna_management"/>
+        </record>
+
+        <record id="group_cna_cdp" model="res.groups">
+            <field name="name">CDP</field>
+            <field name="implied_ids" eval="[(4, ref('cna_base.group_cna_ads'))]"/>
+            <field name="category_id" ref="category_cna_management"/>
+        </record>
+
+        <record id="group_cna_admin" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="implied_ids" eval="[(4, ref('cna_base.group_cna_cdp'))]"/>
+            <field name="category_id" ref="category_cna_management"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+    </data>
+</odoo>

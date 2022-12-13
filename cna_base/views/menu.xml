@@ -1,0 +1,8 @@
+<odoo>
+    <menuitem id="menu_site_lieu_categ" name="Lieux" parent="industry_fsm.fsm_menu_settings"
+              action="action_site_lieu_view" sequence="8" groups="cna_base.group_cna_admin"/>
+    <menuitem id="menu_site_site" sequence="3" name='Sites' groups="cna_base.group_cna_admin"
+              parent="industry_fsm.fsm_menu_settings" action="action_site_site"/>
+    <menuitem id="menu_model_importance" sequence="5" name='Importance' groups="cna_base.group_cna_admin"
+              parent="industry_fsm.fsm_menu_settings" action="action_model_importance"/>
+</odoo>

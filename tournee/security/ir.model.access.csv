@@ -1,0 +1,38 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tags_ads,Tags ADS,model_tags_tags,cna_base.group_cna_ads,1,0,0,0
+access_tags_cdp,Tags CDP,model_tags_tags,cna_base.group_cna_cdp,1,1,1,0
+access_tags_admin,Tags ADMIN,model_tags_tags,cna_base.group_cna_admin,1,1,1,0
+access_documents_share_admin,documents.share ADMIN,documents.model_documents_share,cna_base.group_cna_cdp,1,1,1,1
+
+access_add_tags_wizard_cdp,add.tags.wizard CDP,model_add_tags_wizard,cna_base.group_cna_cdp,1,1,1,0
+access_add_tags_wizard_admin,add.tags.wizard ADMIN,model_add_tags_wizard,cna_base.group_cna_admin,1,1,1,1
+
+access_add_comment_task_wizard_cdp,add.comment.task.wizard CDP,tournee.model_add_comment_task_wizard,cna_base.group_cna_cdp,1,1,1,0
+access_add_comment_task_wizard_admin,add.comment.task.wizard ADMIN,tournee.model_add_comment_task_wizard,cna_base.group_cna_admin,1,1,1,1
+
+access_tags_task_anomalie_ads,tags.task.anomalie ADS,model_tags_task_anomalie,cna_base.group_cna_ads,1,1,1,0
+access_tags_task_anomalie_admin,tags.task.anomalie ADMIN,model_tags_task_anomalie,cna_base.group_cna_admin,1,1,1,1
+
+access_tags_anomalie_ads,tags.anomalie ADS,model_tags_anomalie,cna_base.group_cna_ads,1,0,0,0
+access_tags_anomalie_admin,tags.anomalie ADMIN,model_tags_anomalie,cna_base.group_cna_admin,1,1,1,1
+
+access_tags_anomalie_commentaire_cdp,tags.anomalie.commentaire CDP,model_tags_anomalie_commentaire,cna_base.group_cna_ads,1,0,0,0
+access_tags_anomalie_commentaire_admin,tags.anomalie.commentaire ADMIN,model_tags_anomalie_commentaire,cna_base.group_cna_admin,1,1,1,1
+
+access_task_tags_line_ads,task.tags.line ADS,model_task_tags_line,cna_base.group_cna_ads,1,1,1,1
+
+access_ronde_ronde_ads,Ronde ronde ADS,tournee.model_ronde_ronde,cna_base.group_cna_ads,1,0,0,0
+access_ronde_ronde_cdp,ronde.ronde CDP,model_ronde_ronde,cna_base.group_cna_cdp,1,1,1,0
+access_ronde_ronde_admin,ronde.ronde ADMIN,model_ronde_ronde,cna_base.group_cna_admin,1,1,1,1
+
+access_ronde_tags_ads,Ronde Tags ADS,tournee.model_ronde_tags,cna_base.group_cna_ads,1,0,0,0
+access_ronde_tags_cdp,ronde.tags CDP,model_ronde_tags,cna_base.group_cna_cdp,1,1,1,0
+access_ronde_tags_admin,ronde.tags ADMIN,model_ronde_tags,cna_base.group_cna_admin,1,1,1,1
+
+access_cna_project_ads,Project ADS,project.model_project_project,cna_base.group_cna_ads,1,0,0,0
+
+access_project_task_ads,Project task ADS,tournee.model_project_task,cna_base.group_cna_ads,1,1,1,0
+
+access_employee_ads,Employee ADS,hr.model_hr_employee,cna_base.group_cna_ads,1,0,0,0
+
+access_res_partner_ads,Partner ADS,base.model_res_partner,cna_base.group_cna_ads,1,0,0,0

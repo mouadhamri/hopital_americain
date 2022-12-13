@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_task_view_search_fsm" model="ir.ui.view">
+        <field name="name">view.tourne.search</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="industry_fsm.project_task_view_search_fsm"/>
+        <field name="arch" type="xml">
+            <filter name="groupby_user" position="after">
+                <filter string="Ronde" name="groupby_ronde" context="{'group_by':'ronde_id'}"/>
+            </filter>
+            <field name="name" position="after">
+                <field name="ronde_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="project_task_view_list_fsm" model="ir.ui.view">
+        <field name="name">view.tourne.tree</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="industry_fsm.project_task_view_list_fsm"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="planned_date_begin" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="planned_date_end" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="company_id" position="after">
+                <field name="first_scan"/>
+                <field name="last_scan"/>
+                <field name="tourne_duration" sum="sum_tourne_duration"/>
+                <field name="temps_passage_avg" sum="sum_temps_passage_avg"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_tourne_analyse_tree" model="ir.ui.view">
+        <field name="name">view.tourne.analyse.tree</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="user_ids" widget="many2many_tags"/>
+                <field name="tourne_duration" widget="timesheet_uom"/>
+                <field name="temps_passage_avg" widget="timesheet_uom"/>
+                <field name="score"/>
+                <field name="has_anomalies" invisible="1"/>
+                <button name="open_all_anomalies" attrs="{'invisible':[('has_anomalies', '=',False)]}"
+                        class="oe_highlight" type="object" string="Anomalies"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_tourne_historique_view" model="ir.actions.act_window">
+        <field name="name">Historique des rondes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">tree,pivot,form</field>
+        <field name="context" eval="{
+                'tree_view_ref': 'tournee.view_tourne_analyse_tree'}"/>
+    </record>
+
+    <record id="view_site_lieu_form" model="ir.ui.view">
+        <field name="name">view.lieu.form</field>
+        <field name="model">site.lieu</field>
+        <field name="inherit_id" ref="cna_base.view_site_lieu_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="temps_passage_avg" widget="timesheet_uom"/>
+                <field name="tourne_duration" widget="timesheet_uom"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_site_lieu_tree" model="ir.ui.view">
+        <field name="name">view.lieu.tree</field>
+        <field name="model">site.lieu</field>
+        <field name="inherit_id" ref="cna_base.view_site_lieu_tree"/>
+        <field name="arch" type="xml">
+            <field name="site_id" position="after">
+                <field name="temps_passage_avg" widget="timesheet_uom"/>
+                <field name="tourne_duration" widget="timesheet_uom"/>
+            </field>
+        </field>
+    </record>
+</odoo>

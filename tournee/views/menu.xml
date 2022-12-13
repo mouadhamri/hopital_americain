@@ -1,0 +1,21 @@
+<odoo>
+    <menuitem id="menu_tags" sequence="12" name='Tags' parent="industry_fsm.fsm_menu_settings" action="action_tags"
+              groups="cna_base.group_cna_cdp"/>
+    <menuitem id="menu_ronde" sequence="13" name='Ronde'
+              parent="industry_fsm.fsm_menu_settings" action="action_ronde" groups="cna_base.group_cna_admin"/>
+    <menuitem id="menu_rondes" sequence="11" name='Configuration des rondes' groups="cna_base.group_cna_ads"
+              parent="industry_fsm.fsm_tasks_menu" action="action_ronde"/>
+    <menuitem id="menu_analyse_tags" sequence="4" name='Analyse des tags'
+              parent="industry_fsm.fsm_menu_reporting" action="action_tags"/>
+    <menuitem id="menu_analyse_scan" sequence="4" name='Analyse des scans'
+              parent="industry_fsm.fsm_menu_reporting" action="action_analyse_scan"/>
+    <menuitem id="menu_tags_anomalie" sequence="5" name='Anomalie'
+              parent="industry_fsm.fsm_menu_settings" action="action_tags_anomalie" groups="cna_base.group_cna_admin"/>
+    <menuitem id="menu_tags_anomalie_tournee" sequence="11" name='Anomalie des tournées'
+              groups="cna_base.group_cna_cdp"
+              parent="industry_fsm.fsm_tasks_menu" action="action_tags_anomalie_tournee"/>
+    <menuitem id="menu_analyse_anomalie_tournee" sequence="2" name='Analyse des anomalies des rondes'
+              parent="industry_fsm.fsm_menu_reporting" action="action_analyse_anomalie_tournee"/>
+    <menuitem id="menu_tourne_historique_view" name="Historique des rondes"
+              parent="industry_fsm.fsm_menu_reporting" action="action_tourne_historique_view" sequence="3"/>
+</odoo>
