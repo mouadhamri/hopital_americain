@@ -48,14 +48,14 @@
             <field name="partner_id" position="before">
                 <field name="lieu" options="{'no_create':1, 'no_edit':1}"/>
                 <field name="ronde_id"/>
-                <field name="last_scan"/>
                 <field name="temps_passage_avg" widget="timesheet_uom"/>
+                <field name="tourne_duration" widget="timesheet_uom"/>
+                <field name="last_scan"/>
                 <field name="comments"/>
             </field>
 
             <field name="user_ids" position="after">
                 <field name="first_scan"/>
-                <field name="tourne_duration" widget="timesheet_uom"/>
                 <field name="score"/>
             </field>
 
