@@ -6,6 +6,7 @@ from odoo.exceptions import UserError
 
 class ProjectTask(models.Model):
     _name = 'project.task'
+    _description = "Project Task"
     _inherit = ['project.task', 'barcodes.barcode_events_mixin', "timer.mixin"]
 
     tag_anomalie_ids = fields.One2many('task.tags.line', 'task_id', 'Tags')
@@ -127,10 +128,6 @@ class ProjectTask(models.Model):
                 'tag': 'reload',
             }
 
-    def get_all_comments(self):
-        return self.env['tags.task.anomalie'].search([('line_id', 'in', self.tag_anomalie_ids.mapped('id'))]).mapped(
-            'anomalie_commentaire_id.name') or False
-
     def action_timer_stop(self):
 
         if self.user_timer_id.timer_start and self.display_timesheet_timer:
@@ -156,6 +153,7 @@ class ProjectTask(models.Model):
 
 class TaskTagsLine(models.Model):
     _name = 'task.tags.line'
+    _description = "Task Tags Line"
     _rec_name = 'task_id'
 
     tag_id = fields.Many2one('tags.tags', 'Tag', required=True)
@@ -167,6 +165,7 @@ class TaskTagsLine(models.Model):
     hors_parcours = fields.Boolean(string="Hors Parcours", compute='_compute_hors_parcours', store=True)
     temps_passage = fields.Float(compute='compute_temps_passage', store=True, string='Temps passage(min)')
     date_scan_ok = fields.Boolean(compute='check_scan_date', store=True)
+
     @api.depends('scan_date')
     def check_scan_date(self):
         for rec in self:
@@ -177,6 +176,7 @@ class TaskTagsLine(models.Model):
                 elif rec.scan_date.weekday() == 5 and 6 <= rec.scan_date.hour <= 14:
                     date_scan_ok = True
             rec.date_scan_ok = date_scan_ok
+
     @api.depends('task_id', 'task_id.tag_anomalie_ids', 'task_id.tag_anomalie_ids.scan_date', 'scan_date')
     def compute_temps_passage(self):
         for rec in self:
@@ -227,8 +227,9 @@ class TaskTagsLine(models.Model):
 
 class TagsTaskAnomalie(models.Model):
     _name = "tags.task.anomalie"
+    _description = "Tags Task Anomalie"
     _inherit = ['mail.thread', 'mail.activity.mixin', 'documents.mixin']
-    _order = "anomalie_id, anomalie_commentaire_id"
+    _order = "anomalie_id"
 
     def _get_document_tags(self):
         return self.company_id.project_tags
@@ -278,8 +279,6 @@ class TagsTaskAnomalie(models.Model):
     task_id = fields.Many2one('project.task', related='line_id.task_id', store=True, string='Tournée')
     partner_id = fields.Many2one('res.partner', related='task_id.partner_id', store=True, string='Client')
     anomalie_id = fields.Many2one('tags.anomalie', string="Anomalie", required=True)
-    anomalie_commentaire_id = fields.Many2one('tags.anomalie.commentaire', 'Commentaire')
-    criticite = fields.Char('Criticité', related='anomalie_commentaire_id.criticite', store=True)
     date_anomalie = fields.Datetime(default=fields.Datetime.now())
     date = fields.Date(compute='split_date_anomalie', store=True)
     hour = fields.Float(compute='split_date_anomalie', store=True, string='Heure')
@@ -307,56 +306,9 @@ class TagsTaskAnomalie(models.Model):
                            compute="_compute_dates", store=True)
     respo_zone_id = fields.Many2one(string="Responsable zone", related="tag_id.respo_zone_id", store=True)
 
-    red_color_criticite = fields.Boolean(compute="_compute_criticite_colors", default=False)
-    orange_color_criticite = fields.Boolean(compute="_compute_criticite_colors", default=False)
-    yellow_color_criticite = fields.Boolean(compute="_compute_criticite_colors", default=False)
-
     green_color_state = fields.Boolean(compute="_compute_state_colors", default=False)
     blue_color_state = fields.Boolean(compute="_compute_state_colors", default=False)
-
     already_reported = fields.Boolean(compute='compute_already_reported', default=False)
-
-    @api.depends('tag_id', 'anomalie_id', 'anomalie_commentaire_id', 'date_anomalie')
-    def compute_already_reported(self):
-        for record in self:
-            already_reported = False
-            same_tags_task_anomalies = record.env['tags.task.anomalie'].sudo().search(
-                [('tag_id', '=', record.tag_id.id), ('date_anomalie', '<=', record.date_anomalie),
-                 ('date_anomalie', '!=', False), ('id', '!=', record.id)]).sorted('date_anomalie')
-            if same_tags_task_anomalies:
-
-                if same_tags_task_anomalies[-1].anomalie_id == record.anomalie_id and same_tags_task_anomalies[
-                    -1].anomalie_commentaire_id == record.anomalie_commentaire_id:
-                    already_reported = True
-            record.already_reported = already_reported
-
-    @api.depends('date_anomalie')
-    def _compute_dates(self):
-        for anomalie in self:
-            anomalie.year = anomalie.date_anomalie.year
-            anomalie.month = str(anomalie.date_anomalie.month)
-            anomalie.week = anomalie.date_anomalie.isocalendar()[1]
-            anomalie.day = str(anomalie.date_anomalie.weekday())
-
-    @api.depends('criticite')
-    def _compute_criticite_colors(self):
-        for anomalie in self:
-            if anomalie.criticite == "1":
-                anomalie.red_color_criticite = True
-                anomalie.yellow_color_criticite = False
-                anomalie.orange_color_criticite = False
-            elif anomalie.criticite == "2":
-                anomalie.red_color_criticite = False
-                anomalie.yellow_color_criticite = False
-                anomalie.orange_color_criticite = True
-            elif anomalie.criticite == "3":
-                anomalie.red_color_criticite = False
-                anomalie.yellow_color_criticite = True
-                anomalie.orange_color_criticite = False
-            else:
-                anomalie.red_color_criticite = False
-                anomalie.orange_color_criticite = False
-                anomalie.yellow_color_criticite = False
 
     @api.depends('state')
     def _compute_state_colors(self):
@@ -370,6 +322,26 @@ class TagsTaskAnomalie(models.Model):
             else:
                 anomalie.green_color_state = False
                 anomalie.blue_color_state = False
+
+    @api.depends('tag_id', 'anomalie_id', 'date_anomalie')
+    def compute_already_reported(self):
+        for record in self:
+            already_reported = False
+            same_tags_task_anomalies = record.env['tags.task.anomalie'].sudo().search(
+                [('tag_id', '=', record.tag_id.id), ('date_anomalie', '<=', record.date_anomalie),
+                 ('date_anomalie', '!=', False), ('id', '!=', record.id)]).sorted('date_anomalie')
+            if same_tags_task_anomalies:
+                if same_tags_task_anomalies[-1].anomalie_id == record.anomalie_id:
+                    already_reported = True
+            record.already_reported = already_reported
+
+    @api.depends('date_anomalie')
+    def _compute_dates(self):
+        for anomalie in self:
+            anomalie.year = anomalie.date_anomalie.year
+            anomalie.month = str(anomalie.date_anomalie.month)
+            anomalie.week = anomalie.date_anomalie.isocalendar()[1]
+            anomalie.day = str(anomalie.date_anomalie.weekday())
 
     def compute_attachement(self):
         for rec in self:
@@ -413,15 +385,13 @@ class TagsTaskAnomalie(models.Model):
 
     def open_tournee(self):
         return {
-            'name': 'Mes tourné',
+            'name': 'Mes tournées',
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
             'res_model': 'project.task',
             'target': 'self',
-
             'context': {'fsm_mode': True,
                         'show_address': True, },
-
             'view_type': 'form',
             'res_id': self.task_id.id
         }
@@ -436,16 +406,8 @@ class TagsTaskAnomalie(models.Model):
 
 class TagsAnomalie(models.Model):
     _name = 'tags.anomalie'
+    _description = "Tags Anomalie"
     _order = "name"
     _rec_name = 'name'
 
     name = fields.Char('Nom', required=True)
-    commentaire_ids = fields.One2many('tags.anomalie.commentaire', 'anomalie_id', string="Commentaires")
-
-
-class TagsAnomalieCommentaire(models.Model):
-    _name = "tags.anomalie.commentaire"
-
-    name = fields.Char('Commentaire', required=True)
-    criticite = fields.Char('Criticité', required=True)
-    anomalie_id = fields.Many2one('tags.anomalie', 'Anomalie')

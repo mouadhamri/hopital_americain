@@ -5,8 +5,9 @@ from odoo.exceptions import UserError
 
 class Tags(models.Model):
 	_name = 'tags.tags'
+	_description = "Tags Tags"
 
-	name = fields.Char('Nom', copy=False, readonly=True, default=lambda x: _('New'))
+	name = fields.Char('Nom', copy=False, default=lambda x: _('New'))
 	site_id = fields.Many2one('site.site', 'Site', required=True)
 	respo_zone_id = fields.Many2one('res.users', 'Responsable zone')
 	last_date_scan = fields.Datetime(string="Dernier date du scan", required=False, compute="compute_last_scan", store=True)
@@ -51,7 +52,7 @@ class Tags(models.Model):
 
 class Ronde(models.Model):
 	_name = 'ronde.ronde'
-
+	_description = "Ronde Ronde"
 
 	name = fields.Char('Ronde', required=True)
 	tag_ids = fields.One2many('ronde.tags', 'ronde_id', 'Tags')
@@ -83,6 +84,7 @@ class Ronde(models.Model):
 
 class RondeTags(models.Model):
 	_name = 'ronde.tags'
+	_description = "Ronde Tags"
 
 	sequence = fields.Integer(default=1)
 	tag_id = fields.Many2one('tags.tags', 'Tag', required=True, ondelete='restrict')

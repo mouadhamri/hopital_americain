@@ -16,9 +16,6 @@ access_tags_task_anomalie_admin,tags.task.anomalie ADMIN,model_tags_task_anomali
 access_tags_anomalie_ads,tags.anomalie ADS,model_tags_anomalie,cna_base.group_cna_ads,1,0,0,0
 access_tags_anomalie_admin,tags.anomalie ADMIN,model_tags_anomalie,cna_base.group_cna_admin,1,1,1,1
 
-access_tags_anomalie_commentaire_cdp,tags.anomalie.commentaire CDP,model_tags_anomalie_commentaire,cna_base.group_cna_ads,1,0,0,0
-access_tags_anomalie_commentaire_admin,tags.anomalie.commentaire ADMIN,model_tags_anomalie_commentaire,cna_base.group_cna_admin,1,1,1,1
-
 access_task_tags_line_ads,task.tags.line ADS,model_task_tags_line,cna_base.group_cna_ads,1,1,1,1
 
 access_ronde_ronde_ads,Ronde ronde ADS,tournee.model_ronde_ronde,cna_base.group_cna_ads,1,0,0,0

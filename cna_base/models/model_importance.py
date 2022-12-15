@@ -4,6 +4,7 @@ from odoo import api, fields, models
 
 class ModelImportance(models.Model):
     _name = 'model.importance'
+    _description = "Model Importance"
 
     name = fields.Char(required=True, string='Model')
     priority = fields.Selection([

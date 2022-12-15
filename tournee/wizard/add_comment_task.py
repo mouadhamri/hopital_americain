@@ -5,7 +5,7 @@ from odoo import api, fields, models
 
 class ReasonTagNotScanned(models.TransientModel):
     _name = 'add.comment.task.wizard'
-    _description = 'we use this class to add comments to project_task and validate a task'
+    _description = 'Wizard Task comment add'
 
     comments = fields.Text(string="Commentaires", required=False)
     is_required = fields.Boolean()
